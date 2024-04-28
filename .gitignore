@@ -1,0 +1,9 @@
+# macOS system files
+.DS_Store
+__MACOSX/
+
+#Not sharing tokens
+.ENV
+
+# Node.js/npm
+node_modules/

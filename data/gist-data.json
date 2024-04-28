@@ -1,0 +1,21 @@
+{
+    "createGist": {
+      "description": "Gist creation test",
+      "public": false,
+      "files": {
+        "README.md": {
+          "content": "This is a test gist"
+        }
+      }
+    },
+    "updateGist": 
+    {
+      "description": "An updated gist description",
+      "files": {
+        "README.md": {
+              "content": "UPDATED CONTENT"
+          }
+      }
+  }
+  }
+  
