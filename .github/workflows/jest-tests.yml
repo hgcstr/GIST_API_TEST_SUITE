@@ -10,6 +10,10 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
 
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+      GH_API_URL: https://api.github.com/
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
