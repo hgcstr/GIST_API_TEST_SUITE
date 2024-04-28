@@ -17,7 +17,7 @@ async function fetchGithub(
       )}`
     );
   }
-  const githubAPIUrl = process.env.GITHUB_API_URL;
+  const githubAPIUrl = process.env.GH_API_URL;
   const baseUrl = githubAPIUrl + endpoint;
   const headers = {
     Accept: mediaType,

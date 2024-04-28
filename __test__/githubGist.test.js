@@ -5,8 +5,7 @@ const { validate } = require("jsonschema");
 const getGistSchema = require("../data/getGistSchema.json");
 
 describe("Gist API Tests", () => {
-  //process.env.GITHUB_PAT;
-  const accessToken = process.env.GITHUB_ACCESS_TOKEN;
+  const accessToken = process.env.GH_ACCESS_TOKEN;
 
   if (!accessToken) {
     throw new Error("Please provide and access token");
