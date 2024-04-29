@@ -11,15 +11,20 @@ describe("Gist API Tests", () => {
     throw new Error("Please provide and access token");
   }
 
+  let endpoint;
+  let gistID;
+  let method;
+  let body;
+  let response;
+  let responseData;
+  let fileName;
+  let content;
+
+  beforeEach(() => {
+    endpoint = "gists";
+  });
+
   describe("Successful Scenarios", () => {
-    let endpoint = "gists";
-    let gistID;
-    let method;
-    let body;
-    let response;
-    let responseData;
-    let fileName;
-    let content;
     test("Create a gist successfully", async () => {
       method = "POST";
 
@@ -93,20 +98,59 @@ describe("Gist API Tests", () => {
   });
 
   describe("Negative Scenarios", () => {
-    test("Attempt to create a gist with invalid data", async () => {
-      ///DONT DELETE!!! FOR TESTING THE DATA
-      // const body = JSON.stringify(createGist);
+    describe("Create Negative Scenarios", () => {
+      test("Bad credentials - Status Code 401", async () => {
+        method = "POST";
+        body = testData.createGist;
+        wrongAccessToken = "TESTACCESSTOKEN";
+
+        response = await fetchGithub(endpoint, method, wrongAccessToken, body);
+        responseData = await response.json();
+        expect(response.status).toBe(401);
+        expect(responseData.message).toBe("Bad credentials");
+      });
+      test("Resource not found - Status Code 404", async () => {
+        wrongEndpointOrURL = endpoint + "/unexpected-string";
+        method = "POST";
+        body = testData.createGist;
+
+        response = await fetchGithub(
+          wrongEndpointOrURL,
+          method,
+          accessToken,
+          body
+        );
+        responseData = await response.json();
+
+        expect(response.status).toBe(404);
+        expect(responseData.message).toBe("Not Found");
+      });
+      test("Validation failed - Invalid body - Status Code 422", async () => {
+        method = "POST";
+        body = testData.wrongData;
+
+        response = await fetchGithub(endpoint, method, accessToken, body);
+        responseData = await response.json();
+
+        expect(response.status).toBe(422);
+        expect(responseData.message).toBe(
+          "Invalid request.\n\nInvalid input: object is missing required key: files."
+        );
+      });
     });
-
-    test("Attempt to get a non-existent gist", async () => {});
-
-    test("Attempt to update a non-existent gist", async () => {});
-
-    test("Attempt to delete a non-existent gist", async () => {});
-
-    // Additional negative scenarios
-    test("Attempt to create a gist without authentication", async () => {});
-
-    test("Attempt to update a gist with invalid data", async () => {});
+    describe("Get Negative Scenarios", () => {
+      test("Attempt to get a non-existent gist", async () => {
+        method = "GET";
+        endpointWithWrongGist = `gists/ysduyf87fgjhdsfgjd`;
+        response = await fetchGithub(
+          endpointWithWrongGist,
+          method,
+          accessToken
+        );
+        responseData = await response.json();
+        expect(response.status).toBe(404);
+        expect(responseData.message).toBe("Not Found");
+      });
+    });
   });
 });
